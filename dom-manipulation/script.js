@@ -9,6 +9,7 @@ let quotes = [
 function displayRandomQuote() {
   let index = Math.floor(Math.random() * quotes.length);
   let display = document.getElementById("quoteDisplay");
+  // Use textContent instead of innerHTML as required
   display.textContent = quotes[index].text + " — [" + quotes[index].category + "]";
 }
 
