@@ -8,11 +8,11 @@ const quotes = [
 // Function to display a random quote
 function displayRandomQuote() {
   const randomIndex = Math.floor(Math.random() * quotes.length);
-  const quoteDisplay = document.getElementById("quoteDisplay");
-  quoteDisplay.textContent = `${quotes[randomIndex].text} — [${quotes[randomIndex].category}]`;
+  document.getElementById("quoteDisplay").textContent =
+    `${quotes[randomIndex].text} — [${quotes[randomIndex].category}]`;
 }
 
-// Function to add a new quote dynamically
+// Function to add a new quote
 function addQuote() {
   const quoteText = document.getElementById("newQuoteText").value.trim();
   const quoteCategory = document.getElementById("newQuoteCategory").value.trim();
@@ -21,14 +21,14 @@ function addQuote() {
     quotes.push({ text: quoteText, category: quoteCategory });
     document.getElementById("newQuoteText").value = "";
     document.getElementById("newQuoteCategory").value = "";
-    displayRandomQuote(); // Show the newly added quote immediately
+    displayRandomQuote();
   } else {
     alert("Please enter both a quote and a category.");
   }
 }
 
-// Event listener for "Show New Quote" button
+// Event listener for the "Show New Quote" button
 document.getElementById("newQuote").addEventListener("click", displayRandomQuote);
 
-// Display a random quote when the page loads
+// Display a random quote on page load
 displayRandomQuote();
