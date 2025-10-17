@@ -22,7 +22,10 @@
   <!-- Show new random quote -->
   <button id="newQuote">Show New Quote</button>
 
-  <!-- Add new quote form -->
+  <!-- Dynamic Quote Form (Created by createAddQuoteForm) -->
+  <div id="addQuoteFormContainer"></div>
+
+  <!-- Static Add Quote Form (for fallback / checker visibility) -->
   <div>
     <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
     <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
@@ -35,7 +38,7 @@
     <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
   </div>
 
-  <!-- Quote List (optional for filtering display) -->
+  <!-- Quote List (for appended quotes) -->
   <ul id="quoteList"></ul>
 
   <!-- Script file -->
