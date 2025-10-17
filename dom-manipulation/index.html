@@ -2,51 +2,43 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dynamic Quote Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamic Quote Generator with Server Sync</title>
 </head>
 <body>
   <h1>Dynamic Quote Generator</h1>
 
-  <div>
-    <label for="categoryFilter">Filter by Category:</label>
-    <select id="categoryFilter" onchange="filterQuotes()">
-      <option value="all">All Categories</option>
-      <!-- Categories populated dynamically -->
-    </select>
-  </div>
+  <!-- Notification area for sync and conflict updates -->
+  <div id="notification"></div>
 
+  <!-- Category Filter -->
+  <select id="categoryFilter" onchange="filterQuotes()">
+    <option value="all">All Categories</option>
+  </select>
+
+  <!-- Quote Display Section -->
   <div id="quoteDisplay"></div>
 
+  <!-- Show new random quote -->
   <button id="newQuote">Show New Quote</button>
 
+  <!-- Add new quote form -->
   <div>
-    <input id="newQuoteText" type="text" placeholder="Enter a new quote">
-    <input id="newQuoteCategory" type="text" placeholder="Enter quote category">
+    <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
+    <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
     <button onclick="addQuote()">Add Quote</button>
   </div>
 
+  <!-- Import/Export JSON -->
   <div>
-    <button onclick="exportToJsonFile()">Export Quotes as JSON</button>
-    <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)">
+    <button onclick="exportToJsonFile()">Export Quotes</button>
+    <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
   </div>
 
-  <!-- Sync UI -->
-  <div id="syncControls" style="margin-top:12px;">
-    <button id="syncNowBtn" onclick="syncNow()">Sync Now</button>
-    <span id="syncStatus" style="margin-left:12px;"></span>
-    <button id="resolveConflictsBtn" style="display:none; margin-left:12px;" onclick="openManualResolve()">Resolve Conflicts</button>
-  </div>
+  <!-- Quote List (optional for filtering display) -->
+  <ul id="quoteList"></ul>
 
-  <!-- Manual resolve area (hidden by default) -->
-  <div id="manualResolve" style="display:none; margin-top:12px; border:1px solid #ccc; padding:10px;">
-    <h3>Conflicts detected</h3>
-    <div id="conflictList"></div>
-    <button onclick="acceptServerResolution()">Accept Server Versions</button>
-    <button onclick="keepLocalResolution()">Keep Local Versions (push to server)</button>
-    <button onclick="closeManualResolve()">Close</button>
-  </div>
-
+  <!-- Script file -->
   <script src="script.js"></script>
 </body>
 </html>
