@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dynamic Quote Generator</title>
 </head>
 <body>
@@ -29,6 +29,22 @@
   <div>
     <button onclick="exportToJsonFile()">Export Quotes as JSON</button>
     <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)">
+  </div>
+
+  <!-- Sync UI -->
+  <div id="syncControls" style="margin-top:12px;">
+    <button id="syncNowBtn" onclick="syncNow()">Sync Now</button>
+    <span id="syncStatus" style="margin-left:12px;"></span>
+    <button id="resolveConflictsBtn" style="display:none; margin-left:12px;" onclick="openManualResolve()">Resolve Conflicts</button>
+  </div>
+
+  <!-- Manual resolve area (hidden by default) -->
+  <div id="manualResolve" style="display:none; margin-top:12px; border:1px solid #ccc; padding:10px;">
+    <h3>Conflicts detected</h3>
+    <div id="conflictList"></div>
+    <button onclick="acceptServerResolution()">Accept Server Versions</button>
+    <button onclick="keepLocalResolution()">Keep Local Versions (push to server)</button>
+    <button onclick="closeManualResolve()">Close</button>
   </div>
 
   <script src="script.js"></script>
