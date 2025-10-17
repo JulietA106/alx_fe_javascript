@@ -1,5 +1,5 @@
-// Array of quotes with categories
-let quotes = [
+// Array of quotes with text and category
+const quotes = [
   { text: "The best way to predict the future is to invent it.", category: "Inspiration" },
   { text: "Life is what happens when you're busy making other plans.", category: "Life" },
   { text: "Do what you can, with what you have, where you are.", category: "Motivation" }
