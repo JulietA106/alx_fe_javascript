@@ -1,11 +1,10 @@
 // Global quotes array
 let quotes = [];
 
-// Load quotes from local storage if available
+// Load quotes from local storage or set defaults
 if (localStorage.getItem("quotes")) {
   quotes = JSON.parse(localStorage.getItem("quotes"));
 } else {
-  // Default quotes
   quotes = [
     { text: "The best way to predict the future is to invent it.", category: "Inspiration" },
     { text: "Life is what happens when you're busy making other plans.", category: "Life" },
@@ -14,33 +13,73 @@ if (localStorage.getItem("quotes")) {
   localStorage.setItem("quotes", JSON.stringify(quotes));
 }
 
+// Load last selected category filter
+let lastCategory = localStorage.getItem("lastCategoryFilter") || "all";
+
 // Save quotes to local storage
 function saveQuotes() {
   localStorage.setItem("quotes", JSON.stringify(quotes));
 }
 
-// Display a random quote
+// Populate category dropdown dynamically
+function populateCategories() {
+  const select = document.getElementById("categoryFilter");
+  const uniqueCategories = [...new Set(quotes.map(q => q.category))];
+
+  // Remove old options except "All Categories"
+  select.innerHTML = '<option value="all">All Categories</option>';
+
+  uniqueCategories.forEach(cat => {
+    const option = document.createElement("option");
+    option.value = cat;
+    option.textContent = cat;
+    select.appendChild(option);
+  });
+
+  // Restore last selected category
+  select.value = lastCategory;
+}
+
+// Display a random quote, considering the current category filter
 function displayRandomQuote() {
-  let index = Math.floor(Math.random() * quotes.length);
-  let quote = quotes[index];
+  let filteredQuotes = quotes;
+  const category = document.getElementById("categoryFilter").value;
+  if (category && category !== "all") {
+    filteredQuotes = quotes.filter(q => q.category === category);
+  }
+
+  if (filteredQuotes.length === 0) {
+    document.getElementById("quoteDisplay").textContent = "No quotes in this category.";
+    return;
+  }
+
+  const quote = filteredQuotes[Math.floor(Math.random() * filteredQuotes.length)];
   document.getElementById("quoteDisplay").textContent = quote.text + " — [" + quote.category + "]";
 
   // Optional: store last viewed quote in session storage
-  sessionStorage.setItem("lastQuoteIndex", index);
+  sessionStorage.setItem("lastQuoteIndex", quotes.indexOf(quote));
 }
 
-// Add a new quote and update storage
+// Add a new quote
 function addQuote() {
   let text = document.getElementById("newQuoteText").value.trim();
   let category = document.getElementById("newQuoteCategory").value.trim();
 
   if (text && category) {
-    quotes.push({ text: text, category: category });
+    quotes.push({ text, category });
     saveQuotes();
     document.getElementById("newQuoteText").value = "";
     document.getElementById("newQuoteCategory").value = "";
+    populateCategories(); // Update categories dropdown
     displayRandomQuote();
   }
+}
+
+// Filter quotes based on selected category
+function filterQuotes() {
+  const category = document.getElementById("categoryFilter").value;
+  localStorage.setItem("lastCategoryFilter", category);
+  displayRandomQuote();
 }
 
 // Export quotes to JSON file
@@ -65,12 +104,13 @@ function importFromJsonFile(event) {
       if (Array.isArray(importedQuotes)) {
         quotes.push(...importedQuotes);
         saveQuotes();
+        populateCategories();
         alert("Quotes imported successfully!");
         displayRandomQuote();
       } else {
         alert("Invalid JSON format.");
       }
-    } catch (err) {
+    } catch {
       alert("Error parsing JSON file.");
     }
   };
@@ -80,7 +120,8 @@ function importFromJsonFile(event) {
 // Event listener for "Show New Quote" button
 document.getElementById("newQuote").addEventListener("click", displayRandomQuote);
 
-// Display a random quote on page load
+// Initialize categories and display quote
+populateCategories();
 displayRandomQuote();
 
 // Optional: restore last viewed quote from session storage
