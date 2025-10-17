@@ -5,8 +5,8 @@ let quotes = [
   { text: "Do what you can, with what you have, where you are.", category: "Motivation" }
 ];
 
-// Function to display a random quote - renamed to showRandomQuote
-function showRandomQuote() {
+// Function to display a random quote
+function displayRandomQuote() {
   let index = Math.floor(Math.random() * quotes.length);
   let display = document.getElementById("quoteDisplay");
   display.textContent = quotes[index].text + " — [" + quotes[index].category + "]";
@@ -21,12 +21,39 @@ function addQuote() {
     quotes.push({ text: text, category: category });
     document.getElementById("newQuoteText").value = "";
     document.getElementById("newQuoteCategory").value = "";
-    showRandomQuote();
+    displayRandomQuote();
   }
 }
 
-// Event listener for the "Show New Quote" button
-document.getElementById("newQuote").addEventListener("click", showRandomQuote);
+// Function to create the add quote form
+function createAddQuoteForm() {
+  // This function creates the form elements for adding quotes
+  const formContainer = document.createElement('div');
+  
+  const textInput = document.createElement('input');
+  textInput.type = 'text';
+  textInput.id = 'newQuoteText';
+  textInput.placeholder = 'Enter quote text';
+  
+  const categoryInput = document.createElement('input');
+  categoryInput.type = 'text';
+  categoryInput.id = 'newQuoteCategory';
+  categoryInput.placeholder = 'Enter category';
+  
+  const addButton = document.createElement('button');
+  addButton.textContent = 'Add Quote';
+  addButton.addEventListener('click', addQuote);
+  
+  formContainer.appendChild(textInput);
+  formContainer.appendChild(categoryInput);
+  formContainer.appendChild(addButton);
+  
+  document.body.appendChild(formContainer);
+}
 
-// Display a random quote on page load
-showRandomQuote();
+// Event listener for the "Show New Quote" button
+document.getElementById("newQuote").addEventListener("click", displayRandomQuote);
+
+// Initialize the application
+displayRandomQuote();
+createAddQuoteForm();
