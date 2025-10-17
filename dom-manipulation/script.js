@@ -9,7 +9,7 @@ let quotes = JSON.parse(localStorage.getItem("quotes")) || [
   { text: "Success is not in what you have, but who you are.", category: "Success" }
 ];
 
-// Selected category for filtering (Task 2)
+// Selected category for filtering
 let selectedCategory = localStorage.getItem("selectedCategory") || "all";
 
 // Display a random quote (Task 0)
@@ -32,7 +32,6 @@ function showRandomQuote() {
     <p><em>- ${randomQuote.category}</em></p>
   `;
 
-  // Save last viewed quote in session storage
   sessionStorage.setItem("lastViewedQuote", JSON.stringify(randomQuote));
 }
 
@@ -52,6 +51,7 @@ function addQuote() {
   saveQuotes();
   populateCategories();
   showRandomQuote();
+  postQuoteToServer(newQuote); // send to server
 
   document.getElementById("newQuoteText").value = "";
   document.getElementById("newQuoteCategory").value = "";
@@ -82,7 +82,7 @@ function filterQuotes() {
   showRandomQuote();
 }
 
-// Export quotes as JSON file (Task 1)
+// Export quotes as JSON file
 function exportToJsonFile() {
   const blob = new Blob([JSON.stringify(quotes, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
@@ -92,7 +92,7 @@ function exportToJsonFile() {
   a.click();
 }
 
-// Import quotes from JSON file (Task 1)
+// Import quotes from JSON file
 function importFromJsonFile(event) {
   const fileReader = new FileReader();
   fileReader.onload = function (e) {
@@ -109,19 +109,19 @@ function importFromJsonFile(event) {
 // Task 3: Server Sync Simulation
 // =====================
 
-// Fetch quotes from mock server (must contain this URL)
+// Fetch quotes from mock server (MUST contain this URL)
 async function fetchQuotesFromServer() {
   try {
     const response = await fetch("https://jsonplaceholder.typicode.com/posts");
     const data = await response.json();
 
-    // Simulate converting server posts to quotes
+    // Convert mock posts to quote objects
     const serverQuotes = data.slice(0, 5).map(post => ({
       text: post.title,
       category: "Server"
     }));
 
-    // Simple conflict resolution: server data takes precedence
+    // Conflict resolution: server data takes precedence
     quotes = [...serverQuotes, ...quotes];
     saveQuotes();
     populateCategories();
@@ -135,16 +135,34 @@ async function fetchQuotesFromServer() {
   }
 }
 
+// POST new quote to mock server (MUST contain method, POST, headers, Content-Type)
+async function postQuoteToServer(quote) {
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(quote)
+    });
+
+    const result = await response.json();
+    console.log("Quote posted to server:", result);
+  } catch (error) {
+    console.error("Error posting quote:", error);
+  }
+}
+
 // Sync quotes periodically
 function syncQuotes() {
   fetchQuotesFromServer();
   setInterval(fetchQuotesFromServer, 30000); // every 30 seconds
 }
 
-// Event listener for "Show New Quote" button (Task 0)
+// Event listener for "Show New Quote" button
 document.getElementById("newQuote").addEventListener("click", showRandomQuote);
 
-// Initialize app on page load
+// Initialize app
 window.onload = function () {
   populateCategories();
   showRandomQuote();
